@@ -43,14 +43,4 @@ public class StickerFactory {
         ImageIO.write(newImage, "png", new File(outFile));
     }
 
-    public static void main(String[] args) {
-        try {
-            StickerFactory.createSticker(
-                    "https://pbs.twimg.com/media/E8X2s6rXIAUiVib.jpg",
-                    "public/sticker-1.png", "JA OUVIU O ALBO NOVO DA LANA DEL REY ???", Font.SERIF, Font.BOLD,
-                    24, Color.BLACK);
-        } catch (IOException e) {
-            System.out.printf("Houve um erro: %s", e);
-        }
-    }
 }
