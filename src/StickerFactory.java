@@ -5,13 +5,17 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 
 import javax.imageio.ImageIO;
 
 public class StickerFactory {
-    static void createSticker(String originalFile, String outFile, String message) throws IOException {
+    static void createSticker(String URL, String outFile, String message, String font, int style, int size, Color color)
+            throws IOException {
+        InputStream url = new URL(URL).openStream();
         // 1. read image
-        var oldImage = ImageIO.read(new File(originalFile));
+        var oldImage = ImageIO.read(url);
 
         // 2. create new image
         var width = oldImage.getWidth();
@@ -27,21 +31,24 @@ public class StickerFactory {
         graphics.drawImage((Image) oldImage, 0, 0, null);
 
         // 4. write message on image
-        graphics.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 32));
-        graphics.setColor(Color.PINK);
+        graphics.setFont(new Font(font, style, size));
+        graphics.setColor(color);
 
+        // TODO: centralize the x position
         var positionX = width / 12; // where the message will be written
-        System.out.println(width);
-        System.out.println(positionX);
+        var positionY = newImageHeight - 300;
         graphics.drawString(message, positionX,
-                newImageHeight - 100);
+                positionY);
         // 5. write new image on a file
         ImageIO.write(newImage, "png", new File(outFile));
     }
 
     public static void main(String[] args) {
         try {
-            StickerFactory.createSticker("public/test.jpg", "public/sticker.png", "let the light in");
+            StickerFactory.createSticker(
+                    "https://pbs.twimg.com/media/E8X2s6rXIAUiVib.jpg",
+                    "public/sticker-1.png", "JA OUVIU O ALBO NOVO DA LANA DEL REY ???", Font.SERIF, Font.BOLD,
+                    24, Color.BLACK);
         } catch (IOException e) {
             System.out.printf("Houve um erro: %s", e);
         }
